@@ -2,7 +2,9 @@ package org.sparrow;
 
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.sparrow.base.BaseTests;
 
@@ -115,13 +117,19 @@ public abstract class AbstractRaiffeisenTest extends BaseTests {
         WebElement element = driver.findElement(By.xpath(xpath));
         waitUtilElementToBeClickable(element);
         element.click();
-        element.clear();
-        char[] chars = value.toCharArray();
-
-        for (char aChar : chars) {
-            element.click();
-            element.sendKeys(aChar + "");
-        }
+//        element.clear();
+//        char[] chars = value.toCharArray();
+//
+//        for (char aChar : chars) {
+//            element.click();
+//            element.sendKeys(aChar + "");
+//        }
+        Actions actions = new Actions(driver);
+        actions.sendKeys(Keys.chord(Keys.CONTROL, "A"))
+                .sendKeys(Keys.BACK_SPACE)
+                .sendKeys(value)
+                .build()
+                .perform();
         Assertions.assertEquals(result, element.getAttribute("value"), "Поле было заполнено некорректно");
         System.out.println(element.getAttribute("value"));
     }
